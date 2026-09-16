@@ -1,0 +1,79 @@
+/* Scandinavian minimalist tokens: natural warm paper, deep carbon ink, restrained rules, crisp sans-serif */
+:root {
+  --color-paper: #faf9f6;
+  --color-surface: #eeece6;
+  --color-surface-raised: #e2e0d8;
+  --color-pill-bg: #e8e6df;
+  --color-pill-hover: #dedcd4;
+  --color-ink: #171716;
+  --color-muted: #5c5c56;
+  --color-rule: #d5d3cb;
+  --color-border: #d5d3cb;
+  --color-accent: #2e4a3e;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-sans);
+  --font-body: var(--font-sans);
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-body: 0.9375rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-title: clamp(1.75rem, 3.2vw, 2.25rem);
+
+  --radius-sm: 5px;
+  --radius-md: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-paper: #141413;
+    --color-surface: #20201e;
+    --color-surface-raised: #2a2a27;
+    --color-pill-bg: #2d2d2a;
+    --color-pill-hover: #383833;
+    --color-ink: #eeeee9;
+    --color-muted: #b5b5ad;
+    --color-rule: #3c3c38;
+    --color-border: #3c3c38;
+    --color-accent: #4a7560;
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-paper: #141413;
+  --color-surface: #20201e;
+  --color-surface-raised: #2a2a27;
+  --color-pill-bg: #2d2d2a;
+  --color-pill-hover: #383833;
+  --color-ink: #eeeee9;
+  --color-muted: #b5b5ad;
+  --color-rule: #3c3c38;
+  --color-border: #3c3c38;
+  --color-accent: #4a7560;
+}
+
+:root[data-theme="light"] {
+  --color-paper: #faf9f6;
+  --color-surface: #eeece6;
+  --color-surface-raised: #e2e0d8;
+  --color-pill-bg: #e8e6df;
+  --color-pill-hover: #dedcd4;
+  --color-ink: #171716;
+  --color-muted: #5c5c56;
+  --color-rule: #d5d3cb;
+  --color-border: #d5d3cb;
+  --color-accent: #2e4a3e;
+}

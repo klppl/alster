@@ -1,0 +1,30 @@
+{{template "head" .}}
+<main id="main">
+  <section class="intro">
+    <h1 class="intro-title">Writing</h1>
+    <p class="intro-lead">Notes, thoughts, and technical write-ups.</p>
+  </section>
+  {{if .Posts}}
+  <div class="post-archive">
+    {{range .Posts}}
+    <article class="post-card">
+      <div class="post-card-meta">
+        {{if .Date}}<time datetime="{{.Date}}">{{.Date}}</time>{{end}}
+        {{if .Tags}}
+        <div class="tags">
+          {{range .Tags}}<span class="tag">{{.}}</span>{{end}}
+        </div>
+        {{end}}
+      </div>
+      <div class="post-card-main">
+        <h2 class="post-card-title"><a href="{{pageURL .URL $.Prefix}}">{{.Title}}</a></h2>
+        {{if .Description}}<p class="post-card-desc">{{.Description}}</p>{{end}}
+      </div>
+    </article>
+    {{end}}
+  </div>
+  {{else}}
+  <p class="empty">No posts yet.</p>
+  {{end}}
+</main>
+{{template "footer" .}}

@@ -1,0 +1,60 @@
+{{template "head" .}}
+<main id="main">
+  <section class="intro">
+    <h1 class="intro-title">Projects</h1>
+    <p class="intro-lead">Selected work, tools, and technical experiments.</p>
+  </section>
+  {{if .Tags}}
+  <div class="filters" hidden>
+    <nav class="filter-nav" aria-label="Filter projects by tag">
+      <button type="button" class="filter-btn is-active" data-tag="" aria-pressed="true">All</button>
+      {{range .Tags}}
+      <button type="button" class="filter-btn" data-tag="{{.}}" aria-pressed="false">{{.}}</button>
+      {{end}}
+    </nav>
+  </div>
+  {{end}}
+  {{range .Groups}}
+  <section class="project-group" aria-label="{{.Name}}">
+    <div class="group-header">
+      <h2 class="group-title">{{.Name}}</h2>
+      <span class="group-count">{{len .Pages}}</span>
+    </div>
+    <div class="grid">
+      {{range .Pages}}
+      <article class="card" data-tags="{{join .Tags ","}}">
+        <a class="cover" href="{{pageURL .URL $.Prefix}}" aria-label="View {{.Title}}">
+          {{if .CoverImage.WebP}}
+          <picture>
+            <source type="image/webp" srcset="{{asset .CoverImage.WebP $.Prefix}}">
+            <img src="{{asset .CoverImage.Fallback $.Prefix}}" alt="" width="{{.CoverImage.Width}}" height="{{.CoverImage.Height}}" decoding="async" loading="lazy">
+          </picture>
+          {{else if .CoverURL}}
+          <img src="{{asset .CoverURL $.Prefix}}" alt="" decoding="async" loading="lazy">
+          {{else}}
+          <span class="no-cover"><span class="no-cover-text">{{.Title}}</span></span>
+          {{end}}
+        </a>
+        <div class="card-body">
+          <div class="card-meta">
+            {{if .Date}}<time datetime="{{.Date}}">{{.Date}}</time>{{end}}
+            {{if .Status}}<span class="status">{{if eq .Status "wip"}}In progress{{else}}{{.Status}}{{end}}</span>{{end}}
+          </div>
+          <h3 class="card-title"><a href="{{pageURL .URL $.Prefix}}">{{.Title}}</a></h3>
+          {{if .Description}}<p class="card-desc">{{.Description}}</p>{{end}}
+          {{if .Tags}}
+          <div class="tags" aria-label="Tags">
+            {{range .Tags}}<span class="tag">{{.}}</span>{{end}}
+          </div>
+          {{end}}
+        </div>
+      </article>
+      {{end}}
+    </div>
+  </section>
+  {{else}}
+  <p class="empty">No projects yet. Add a Markdown file inside a content folder.</p>
+  {{end}}
+  <p id="no-results" class="empty" hidden>No projects found with this tag.</p>
+</main>
+{{template "footer" .}}

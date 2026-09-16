@@ -1,0 +1,32 @@
+{{template "head" .}}
+<main id="main" class="detail post-detail">
+  <div class="detail-top">
+    <a class="back-link" href="{{pageURL "blog/index.html" .Prefix}}">← Writing</a>
+  </div>
+  {{with .Page}}
+  <header class="detail-header post-header">
+    <h1 class="detail-title">{{.Title}}</h1>
+    {{if .Description}}<p class="detail-lede">{{.Description}}</p>{{end}}
+    <div class="detail-meta">
+      {{if .Date}}<time class="meta-item" datetime="{{.Date}}">{{.Date}}</time>{{end}}
+      {{if .Tags}}<div class="meta-tags">{{range .Tags}}<span class="meta-tag">{{.}}</span>{{end}}</div>{{end}}
+    </div>
+  </header>
+  {{if .CoverImage.WebP}}
+  <figure class="detail-cover">
+    <picture>
+      <source type="image/webp" srcset="{{asset .CoverImage.WebP $.Prefix}}">
+      <img src="{{asset .CoverImage.Fallback $.Prefix}}" alt="" width="{{.CoverImage.Width}}" height="{{.CoverImage.Height}}">
+    </picture>
+  </figure>
+  {{else if .CoverURL}}
+  <figure class="detail-cover">
+    <img src="{{asset .CoverURL $.Prefix}}" alt="">
+  </figure>
+  {{end}}
+  <article class="prose">
+    {{.HTML}}
+  </article>
+  {{end}}
+</main>
+{{template "footer" .}}

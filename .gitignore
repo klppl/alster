@@ -1,0 +1,5 @@
+/dist/
+/alster
+/.alster-build-*
+.DS_Store
+.hallmark/

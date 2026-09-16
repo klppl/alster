@@ -1,0 +1,23 @@
+title: Alster
+author: Alex
+description: Small tools, themes, and things I make in my spare time.
+base_url: ""
+accent: "#315d49"
+content: content
+output: dist
+templates: templates
+image_width: 1600
+nav:
+  - label: Projects
+    url: /projects/index.html
+  - label: Blog
+    url: /blog/index.html
+  - label: About
+    url: /about/index.html
+social:
+  - label: GitHub
+    url: https://github.com/alex
+  - label: Email
+    url: mailto:alex@example.com
+
+

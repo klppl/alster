@@ -1,0 +1,71 @@
+{{template "head" .}}
+<main id="main" class="home">
+  <div class="home-hero">
+    <div class="home-intro">
+      <h1 class="home-title">{{if .IntroTitle}}{{.IntroTitle}}{{else if .Site.Description}}{{.Site.Description}}{{else}}Small tools, themes, and things I make in my spare time.{{end}}</h1>
+      <div class="home-bio">
+        {{if .IntroHTML}}{{.IntroHTML}}{{else}}<p>I'm {{if .Site.Author}}{{.Site.Author}}{{else}}Alex{{end}}, a software engineer and designer. Focused on simple tools, idiomatic Go, and calm interfaces.</p>{{end}}
+      </div>
+    </div>
+
+    <nav class="home-nav nav-index" aria-label="Sections">
+      <a href="{{pageURL "projects/index.html" .Prefix}}" class="big-link">
+        <span class="big-link-text">Projects</span>
+        <span class="big-link-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a href="{{pageURL "blog/index.html" .Prefix}}" class="big-link">
+        <span class="big-link-text">Writing</span>
+        <span class="big-link-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a href="{{pageURL "about/index.html" .Prefix}}" class="big-link">
+        <span class="big-link-text">About Me</span>
+        <span class="big-link-arrow" aria-hidden="true">→</span>
+      </a>
+    </nav>
+  </div>
+
+  {{if .Featured}}
+  <section class="home-preview" aria-label="Recently shipped">
+    <div class="home-divider">
+      <span class="home-divider-label">Recently shipped</span>
+      <a href="{{pageURL "projects/index.html" .Prefix}}" class="home-divider-more">All projects →</a>
+    </div>
+
+    <div class="preview-grid">
+      {{range .Featured}}
+      <article class="card">
+        <a class="cover" href="{{pageURL .URL $.Prefix}}" aria-label="View {{.Title}}">
+          {{if .CoverImage.WebP}}
+          <picture>
+            <source type="image/webp" srcset="{{asset .CoverImage.WebP $.Prefix}}">
+            <img src="{{asset .CoverImage.Fallback $.Prefix}}" alt="" width="{{.CoverImage.Width}}" height="{{.CoverImage.Height}}" decoding="async" loading="lazy">
+          </picture>
+          {{else if .CoverURL}}
+          <img src="{{asset .CoverURL $.Prefix}}" alt="" decoding="async" loading="lazy">
+          {{else}}
+          <span class="no-cover"><span class="no-cover-text">{{.Title}}</span></span>
+          {{end}}
+        </a>
+        <div class="card-body">
+          <div class="card-meta">
+            {{if .Date}}<time datetime="{{.Date}}">{{.Date}}</time>{{end}}
+            {{if .Status}}<span class="status">{{if eq .Status "wip"}}In progress{{else}}{{.Status}}{{end}}</span>{{end}}
+          </div>
+          <h3 class="card-title"><a href="{{pageURL .URL $.Prefix}}">{{.Title}}</a></h3>
+          {{if .Description}}<p class="card-desc">{{.Description}}</p>{{end}}
+          {{if .Tags}}
+          <div class="tags" aria-label="Tags">
+            {{range .Tags}}<span class="tag">{{.}}</span>{{end}}
+          </div>
+          {{end}}
+        </div>
+      </article>
+      {{end}}
+    </div>
+  </section>
+  {{end}}
+</main>
+{{template "footer" .}}
+
