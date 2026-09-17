@@ -1,17 +1,18 @@
 ---
-title: About
-description: Software engineer, interface designer, and builder of minimalist tools.
+title: Om
+description: Mjukvaruutvecklare och gränssnittsdesigner baserad i Stockholm.
 date: 2026-09-15
+photo: profile.jpg
 ---
 
-I am Alex, a software engineer and designer based in Stockholm. I build small, focused tools and digital artifacts with an emphasis on Scandinavian minimalism, computational efficiency, and calm interfaces.
+Jag bygger små, fokuserade verktyg och digitala artefakter med betoning på skandinavisk minimalism, beräkningseffektivitet och lugna gränssnitt. Min filosofi kretsar kring enkla lösningar som gör en sak exceptionellt väl.
 
-### Principles
+### Principer
 
-- **One Thing Well:** Software should solve a single, concrete problem cleanly rather than accumulating speculative layers.
-- **Content First:** Design exists to clarify and serve text, code, and imagery. Restraint in layout and typography consistently beats decorative embellishment.
-- **Pragmatic Foundations:** Plain files, SQLite, Go standard library, and semantic web standards provide decades of longevity without operational bloat.
+- **En sak, gjort väl.** Bygg för ett konkret problem i taget framför spekulativa system.
+- **Innehållet först.** Formgivning ska tjäna texten och koden, inte dra uppmärksamhet till sig själv.
+- **Enkel grund.** Rena filer, SQLite och semantisk webb håller i decennier utan underhållsstrul.
 
-### Colophon
+### Kolofon
 
-This website is generated statically with [Alster](https://github.com/alex/alster). Output is self-contained HTML and CSS with zero client-side frameworks and no runtime analytics.
+Denna webbplats genereras statiskt med [Alster](https://github.com/alex/alster). Resultatet är helt fristående HTML och CSS utan klientsidiga ramverk eller spårning.

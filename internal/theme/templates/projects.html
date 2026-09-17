@@ -1,13 +1,13 @@
 {{template "head" .}}
 <main id="main">
   <section class="intro">
-    <h1 class="intro-title">Projects</h1>
-    <p class="intro-lead">Selected work, tools, and technical experiments.</p>
+    <h1 class="intro-title">{{t "projects"}}</h1>
+    <p class="intro-lead">{{t "projects_lead"}}</p>
   </section>
   {{if .Tags}}
   <div class="filters" hidden>
-    <nav class="filter-nav" aria-label="Filter projects by tag">
-      <button type="button" class="filter-btn is-active" data-tag="" aria-pressed="true">All</button>
+    <nav class="filter-nav" aria-label="{{t "filter_aria"}}">
+      <button type="button" class="filter-btn is-active" data-tag="" aria-pressed="true">{{t "filter_all"}}</button>
       {{range .Tags}}
       <button type="button" class="filter-btn" data-tag="{{.}}" aria-pressed="false">{{.}}</button>
       {{end}}
@@ -38,7 +38,7 @@
         <div class="card-body">
           <div class="card-meta">
             {{if .Date}}<time datetime="{{.Date}}">{{.Date}}</time>{{end}}
-            {{if .Status}}<span class="status">{{if eq .Status "wip"}}In progress{{else}}{{.Status}}{{end}}</span>{{end}}
+            {{if .Status}}<span class="status">{{if eq .Status "wip"}}{{t "status_wip"}}{{else}}{{.Status}}{{end}}</span>{{end}}
           </div>
           <h3 class="card-title"><a href="{{pageURL .URL $.Prefix}}">{{.Title}}</a></h3>
           {{if .Description}}<p class="card-desc">{{.Description}}</p>{{end}}
@@ -53,8 +53,8 @@
     </div>
   </section>
   {{else}}
-  <p class="empty">No projects yet. Add a Markdown file inside a content folder.</p>
+  <p class="empty">{{t "no_projects"}}</p>
   {{end}}
-  <p id="no-results" class="empty" hidden>No projects found with this tag.</p>
+  <p id="no-results" class="empty" hidden>{{t "no_projects_found"}}</p>
 </main>
 {{template "footer" .}}

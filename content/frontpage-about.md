@@ -1,5 +1,5 @@
 ---
-title: Small tools, themes, and things I make in my spare time.
+title: Små verktyg, teman och saker jag bygger på fritiden.
 ---
 
-I'm Alex, a software engineer and designer. Focused on simple tools, idiomatic Go, and calm interfaces.
+Jag är Alex, mjukvaruingenjör och designer. Fokuserad på enkla verktyg, idiomatisk Go och lugna gränssnitt.

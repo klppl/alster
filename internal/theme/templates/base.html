@@ -1,10 +1,10 @@
 {{define "head"}}<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="{{if .Site.Lang}}{{.Site.Lang}}{{else}}en{{end}}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{.Title}}{{if .Page}} — {{.Site.Title}}{{end}}</title><meta name="description" content="{{.Description}}">
 {{if .Canonical}}<link rel="canonical" href="{{.Canonical}}">{{end}}
 <link rel="stylesheet" href="{{.Prefix}}_theme/tokens.css"><link rel="stylesheet" href="{{.Prefix}}_theme/style.css"><link rel="stylesheet" href="{{.Prefix}}_theme/accent.css">
 <script>(()=>{try{const t=localStorage.getItem('alster-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}})();</script>
 <script src="{{.Prefix}}_theme/filter.js" defer></script></head><body>
-<a class="skip" href="#main">Skip to content</a>
-<header class="site-header"><a class="wordmark" href="{{.Prefix}}index.html">{{.Site.Title}}</a><nav class="site-nav" aria-label="Main">{{range .Site.Nav}}<a href="{{link .URL $.Prefix}}"{{if eqFold $.Section .Label}} class="is-active" aria-current="page"{{end}}>{{.Label}}</a>{{end}}<button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme" title="Toggle theme">◐</button></nav></header>{{end}}
-{{define "footer"}}<footer class="site-footer"><span>{{.Site.Author}}</span>{{if .Site.Social}}<nav class="footer-nav" aria-label="Social">{{range .Site.Social}}<a href="{{link .URL $.Prefix}}">{{.Label}}</a>{{end}}</nav>{{end}}<span class="colophon">Built with Alster</span></footer></body></html>{{end}}
+<a class="skip" href="#main">{{t "skip_to_content"}}</a>
+<header class="site-header"><a class="wordmark" href="{{.Prefix}}index.html">{{.Site.Title}}</a><nav class="site-nav" aria-label="{{t "main_nav"}}">{{range .Site.Nav}}<a href="{{link .URL $.Prefix}}"{{if isSection $.Section .Label}} class="is-active" aria-current="page"{{end}}>{{.Label}}</a>{{end}}<button type="button" class="theme-toggle" id="theme-toggle" aria-label="{{t "toggle_theme"}}" title="{{t "toggle_theme"}}">◐</button></nav></header>{{end}}
+{{define "footer"}}<footer class="site-footer"><span>{{.Site.Author}}</span>{{if .Site.Social}}<nav class="footer-nav" aria-label="{{t "social_nav"}}">{{range .Site.Social}}<a href="{{link .URL $.Prefix}}">{{.Label}}</a>{{end}}</nav>{{end}}<span class="colophon">{{t "built_with"}}</span></footer></body></html>{{end}}

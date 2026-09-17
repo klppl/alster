@@ -344,3 +344,117 @@ func TestMultiSectionSite(t *testing.T) {
 	}
 }
 
+func TestSwedishSite(t *testing.T) {
+	c := fixture(t)
+	c.Lang = "sv"
+	c.Nav = []config.Link{
+		{Label: "Projekt", URL: "/projects/index.html"},
+		{Label: "Blogg", URL: "/blog/index.html"},
+		{Label: "Om", URL: "/about/index.html"},
+	}
+	if err := Run(c); err != nil {
+		t.Fatal(err)
+	}
+
+	indexHTML := read(t, filepath.Join(c.Output, "index.html"))
+	if !strings.Contains(indexHTML, `<html lang="sv">`) {
+		t.Errorf("index.html missing lang=sv: %s", indexHTML[:200])
+	}
+	if !strings.Contains(indexHTML, "Senaste") {
+		t.Error("index.html missing Swedish feed title 'Senaste'")
+	}
+	if !strings.Contains(indexHTML, "Hoppa till innehåll") {
+		t.Error("index.html missing Swedish skip link")
+	}
+	if !strings.Contains(indexHTML, "Byggd med Alster") {
+		t.Error("index.html missing Swedish colophon")
+	}
+
+	projectsHTML := read(t, filepath.Join(c.Output, "projects/index.html"))
+	if !strings.Contains(projectsHTML, ">Alla</button>") {
+		t.Error("projects/index.html missing Swedish filter button 'Alla'")
+	}
+	if !strings.Contains(projectsHTML, `aria-label="Filtrera projekt efter tagg"`) {
+		t.Error("projects/index.html missing Swedish filter aria label")
+	}
+
+	workHTML := read(t, filepath.Join(c.Output, "work/index.html"))
+	if !strings.Contains(workHTML, "← Projekt") {
+		t.Error("work detail page missing Swedish back link '← Projekt'")
+	}
+}
+
+func TestAboutProfilePhoto(t *testing.T) {
+	c := fixture(t)
+	if err := os.MkdirAll(filepath.Join(c.Content, "about"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	put(t, filepath.Join(c.Content, "about/index.md"), "---\ntitle: Om\nphoto: profile.png\n---\nBio text.")
+
+	im := image.NewNRGBA(image.Rect(0, 0, 80, 80))
+	for y := 0; y < 80; y++ {
+		for x := 0; x < 80; x++ {
+			im.Set(x, y, color.NRGBA{100, 100, 100, 255})
+		}
+	}
+	f, err := os.Create(filepath.Join(c.Content, "about/profile.png"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := png.Encode(f, im); err != nil {
+		t.Fatal(err)
+	}
+	if err := f.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := Run(c); err != nil {
+		t.Fatal(err)
+	}
+
+	aboutHTML := read(t, filepath.Join(c.Output, "about/index.html"))
+	if !strings.Contains(aboutHTML, "page-profile-photo") {
+		t.Errorf("about page missing page-profile-photo: %s", aboutHTML)
+	}
+	if !strings.Contains(aboutHTML, `class="page-layout has-photo"`) {
+		t.Errorf("about page missing has-photo class on page-layout: %s", aboutHTML)
+	}
+	if !strings.Contains(aboutHTML, "_images/about/profile.png.webp") {
+		t.Errorf("about page missing webp variant: %s", aboutHTML)
+	}
+}
+
+func TestAboutSidebar(t *testing.T) {
+	c := fixture(t)
+	c.Social = []config.Link{
+		{Label: "GitHub", URL: "https://github.com/alex"},
+		{Label: "Bluesky", URL: "https://bsky.app/profile/alex.bsky.social"},
+		{Label: "E-post", URL: "mailto:alex@example.com"},
+	}
+	if err := os.MkdirAll(filepath.Join(c.Content, "about"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	put(t, filepath.Join(c.Content, "about/index.md"), "---\ntitle: Om\n---\nBio text.")
+
+	if err := Run(c); err != nil {
+		t.Fatal(err)
+	}
+
+	aboutHTML := read(t, filepath.Join(c.Output, "about/index.html"))
+	if !strings.Contains(aboutHTML, "page-sidebar") {
+		t.Errorf("about page missing page-sidebar: %s", aboutHTML)
+	}
+	if !strings.Contains(aboutHTML, "with-sidebar") {
+		t.Errorf("about page missing with-sidebar class: %s", aboutHTML)
+	}
+	if !strings.Contains(aboutHTML, "https://github.com/alex") {
+		t.Errorf("about page missing GitHub link: %s", aboutHTML)
+	}
+	if !strings.Contains(aboutHTML, "https://bsky.app/profile/alex.bsky.social") {
+		t.Errorf("about page missing Bluesky link: %s", aboutHTML)
+	}
+	if !strings.Contains(aboutHTML, `rel="noopener me"`) {
+		t.Errorf("about page external links missing rel=noopener me: %s", aboutHTML)
+	}
+}
+

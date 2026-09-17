@@ -32,7 +32,10 @@ type Meta struct {
 	SourceURL   string   `yaml:"source_url"`
 	Status      string   `yaml:"status"`
 	Cover       string   `yaml:"cover"`
-	Template    string   `yaml:"template"`
+	Photo       string   `yaml:"photo"`
+	Avatar      string   `yaml:"avatar"`
+	Template    string        `yaml:"template"`
+	Social      []config.Link `yaml:"social"`
 }
 
 func Parse(data []byte) (Meta, []byte, error) {

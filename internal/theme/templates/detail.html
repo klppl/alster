@@ -1,7 +1,7 @@
 {{template "head" .}}
 <main id="main" class="detail">
   <div class="detail-top">
-    <a class="back-link" href="{{pageURL "projects/index.html" .Prefix}}">← Projects</a>
+    <a class="back-link" href="{{pageURL "projects/index.html" .Prefix}}">{{t "back_to_projects"}}</a>
   </div>
   {{with .Page}}
   <header class="detail-header">
@@ -9,13 +9,13 @@
     {{if .Description}}<p class="detail-lede">{{.Description}}</p>{{end}}
     <div class="detail-meta">
       {{if .Date}}<time class="meta-item" datetime="{{.Date}}">{{.Date}}</time>{{end}}
-      {{if .Status}}<span class="meta-item status">{{if eq .Status "wip"}}In progress{{else}}{{.Status}}{{end}}</span>{{end}}
+      {{if .Status}}<span class="meta-item status">{{if eq .Status "wip"}}{{t "status_wip"}}{{else}}{{.Status}}{{end}}</span>{{end}}
       {{if .Tags}}<div class="meta-tags">{{range .Tags}}<span class="meta-tag">{{.}}</span>{{end}}</div>{{end}}
     </div>
     {{if or .LiveURL .SourceURL}}
     <div class="project-links">
-      {{if .LiveURL}}<a class="project-link" href="{{link .LiveURL $.Prefix}}" target="_blank" rel="noopener">Live project ↗</a>{{end}}
-      {{if .SourceURL}}<a class="project-link" href="{{link .SourceURL $.Prefix}}" target="_blank" rel="noopener">Source code ↗</a>{{end}}
+      {{if .LiveURL}}<a class="project-link" href="{{link .LiveURL $.Prefix}}" target="_blank" rel="noopener">{{t "live_project"}}</a>{{end}}
+      {{if .SourceURL}}<a class="project-link" href="{{link .SourceURL $.Prefix}}" target="_blank" rel="noopener">{{t "source_code"}}</a>{{end}}
     </div>
     {{end}}
   </header>

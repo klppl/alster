@@ -11,7 +11,7 @@ func TestLoad(t *testing.T) {
 		name, body string
 		bad        bool
 	}{
-		{"defaults", "title: Test", false}, {"typo", "titel: Test", true}, {"color", "accent: 'red;display:none'", true}, {"width", "image_width: 0", true}, {"base", "base_url: /repo", true}, {"link", "nav: [{label: X, url: 'javascript:alert(1)'}]", true},
+		{"defaults", "title: Test", false}, {"typo", "titel: Test", true}, {"color", "accent: 'red;display:none'", true}, {"width", "image_width: 0", true}, {"base", "base_url: /repo", true}, {"link", "nav: [{label: X, url: 'javascript:alert(1)'}]", true}, {"lang_sv", "title: Test\nlang: sv", false}, {"lang_bad", "title: Test\nlang: fr", true},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			root := t.TempDir()

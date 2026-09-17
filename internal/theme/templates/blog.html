@@ -1,8 +1,8 @@
 {{template "head" .}}
 <main id="main">
   <section class="intro">
-    <h1 class="intro-title">Writing</h1>
-    <p class="intro-lead">Notes, thoughts, and technical write-ups.</p>
+    <h1 class="intro-title">{{t "writing"}}</h1>
+    <p class="intro-lead">{{t "writing_lead"}}</p>
   </section>
   {{if .Posts}}
   <div class="post-archive">
@@ -24,7 +24,7 @@
     {{end}}
   </div>
   {{else}}
-  <p class="empty">No posts yet.</p>
+  <p class="empty">{{t "no_posts"}}</p>
   {{end}}
 </main>
 {{template "footer" .}}

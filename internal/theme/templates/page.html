@@ -1,13 +1,50 @@
 {{template "head" .}}
 <main id="main" class="detail page-detail">
   {{with .Page}}
-  <header class="detail-header page-header">
-    <h1 class="detail-title">{{.Title}}</h1>
-    {{if .Description}}<p class="detail-lede">{{.Description}}</p>{{end}}
-  </header>
-  <article class="prose">
-    {{.HTML}}
-  </article>
+  {{$social := $.Site.Social}}
+  {{if .Social}}{{$social = .Social}}{{end}}
+  <div class="page-container{{if $social}} with-sidebar{{end}}">
+    <div class="page-content">
+      <div class="page-layout{{if or .CoverImage.WebP .CoverURL}} has-photo{{end}}">
+        {{if .CoverImage.WebP}}
+        <figure class="page-profile-photo">
+          <picture>
+            <source type="image/webp" srcset="{{asset .CoverImage.WebP $.Prefix}}">
+            <img src="{{asset .CoverImage.Fallback $.Prefix}}" alt="{{if $.Site.Author}}{{$.Site.Author}}{{else}}{{.Title}}{{end}}" width="{{.CoverImage.Width}}" height="{{.CoverImage.Height}}" loading="eager" decoding="async">
+          </picture>
+        </figure>
+        {{else if .CoverURL}}
+        <figure class="page-profile-photo">
+          <img src="{{asset .CoverURL $.Prefix}}" alt="{{if $.Site.Author}}{{$.Site.Author}}{{else}}{{.Title}}{{end}}" loading="eager" decoding="async">
+        </figure>
+        {{end}}
+        <header class="detail-header page-header">
+          <h1 class="detail-title">{{.Title}}</h1>
+          {{if .Description}}<p class="detail-lede">{{.Description}}</p>{{end}}
+        </header>
+        <article class="prose">
+          {{.HTML}}
+        </article>
+      </div>
+    </div>
+    {{if $social}}
+    <aside class="page-sidebar" aria-label="{{t "sidebar_label"}}">
+      <div class="sidebar-block">
+        <h2 class="sidebar-heading">{{t "connect"}}</h2>
+        <ul class="sidebar-links" role="list">
+          {{range $social}}
+          <li class="sidebar-item">
+            <a href="{{link .URL $.Prefix}}" class="sidebar-link{{if .Primary}} is-primary{{end}}"{{if hasPrefix .URL "http"}} target="_blank" rel="noopener me"{{end}}>
+              <span class="sidebar-link-label">{{.Label}}</span>
+              <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
+            </a>
+          </li>
+          {{end}}
+        </ul>
+      </div>
+    </aside>
+    {{end}}
+  </div>
   {{end}}
 </main>
 {{template "footer" .}}

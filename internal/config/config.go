@@ -7,19 +7,22 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
 
 type Link struct {
-	Label string `yaml:"label"`
-	URL   string `yaml:"url"`
+	Label   string `yaml:"label"`
+	URL     string `yaml:"url"`
+	Primary bool   `yaml:"primary,omitempty"`
 }
 type Config struct {
 	Title       string `yaml:"title"`
 	Description string `yaml:"description"`
 	Author      string `yaml:"author"`
 	BaseURL     string `yaml:"base_url"`
+	Lang        string `yaml:"lang"`
 	Accent      string `yaml:"accent"`
 	Content     string `yaml:"content"`
 	Output      string `yaml:"output"`
@@ -30,7 +33,7 @@ type Config struct {
 }
 
 func Load(filename string) (Config, error) {
-	c := Config{Title: "Alster", Accent: "#315d49", Content: "content", Output: "dist", Templates: "templates", ImageWidth: 1600}
+	c := Config{Title: "Alster", Lang: "en", Accent: "#315d49", Content: "content", Output: "dist", Templates: "templates", ImageWidth: 1600}
 	b, err := os.ReadFile(filename)
 	if err != nil {
 		return c, err
@@ -42,6 +45,13 @@ func Load(filename string) (Config, error) {
 	}
 	if c.Title == "" {
 		return c, fmt.Errorf("config: title must not be empty")
+	}
+	c.Lang = strings.ToLower(strings.TrimSpace(c.Lang))
+	if c.Lang == "" {
+		c.Lang = "en"
+	}
+	if c.Lang != "en" && c.Lang != "sv" {
+		return c, fmt.Errorf("config: unsupported lang %q (must be 'en' or 'sv')", c.Lang)
 	}
 	if !regexp.MustCompile(`^#[0-9a-fA-F]{6}$`).MatchString(c.Accent) {
 		return c, fmt.Errorf("config: accent must be a six-digit hex color")

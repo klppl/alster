@@ -1,6 +1,7 @@
 title: Alster
 author: Alex
-description: Small tools, themes, and things I make in my spare time.
+description: Små verktyg, teman och saker jag bygger på fritiden.
+lang: sv
 base_url: ""
 accent: "#315d49"
 content: content
@@ -8,16 +9,24 @@ output: dist
 templates: templates
 image_width: 1600
 nav:
-  - label: Projects
+  - label: Projekt
     url: /projects/index.html
-  - label: Blog
+  - label: Blogg
     url: /blog/index.html
-  - label: About
+  - label: Om
     url: /about/index.html
 social:
+  - label: E-post
+    url: mailto:alex@example.com
+    primary: true
   - label: GitHub
     url: https://github.com/alex
-  - label: Email
-    url: mailto:alex@example.com
+    primary: true
+  - label: Bluesky
+    url: https://bsky.app/profile/alex.bsky.social
+  - label: LinkedIn
+    url: https://linkedin.com/in/alex
+  - label: X
+    url: https://x.com/alex
 
 

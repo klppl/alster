@@ -13,6 +13,7 @@ import (
 	"strings"
 
 	"github.com/alex/alster/internal/config"
+	"github.com/alex/alster/internal/i18n"
 	"github.com/alex/alster/internal/images"
 	"github.com/alex/alster/internal/markdown"
 	"github.com/alex/alster/internal/theme"
@@ -39,6 +40,7 @@ type view struct {
 	Tags                                  []string
 	Posts                                 []Page
 	Featured                              []Page
+	Activity                              []Page
 	IntroTitle                            string
 	IntroHTML                             template.HTML
 }
@@ -170,7 +172,17 @@ func generate(c config.Config, out string) error {
 	if err != nil {
 		return err
 	}
-	tpl, err := template.New("theme").Funcs(template.FuncMap{"join": strings.Join, "link": markdown.LocalURL, "asset": assetURL, "pathURL": markdown.PathURL, "pageURL": pageURL, "hasPrefix": strings.HasPrefix, "eqFold": strings.EqualFold}).ParseFS(theme.Files, "templates/*.html")
+	tpl, err := template.New("theme").Funcs(template.FuncMap{
+		"join":      strings.Join,
+		"link":      markdown.LocalURL,
+		"asset":     assetURL,
+		"pathURL":   markdown.PathURL,
+		"pageURL":   pageURL,
+		"hasPrefix": strings.HasPrefix,
+		"eqFold":    strings.EqualFold,
+		"t":         func(key string, args ...any) string { return i18n.T(c.Lang, key, args...) },
+		"isSection": i18n.IsSectionMatch,
+	}).ParseFS(theme.Files, "templates/*.html")
 	if err != nil {
 		return err
 	}
@@ -250,13 +262,34 @@ func generate(c config.Config, out string) error {
 		if err != nil {
 			return fmt.Errorf("%s: %w", file, err)
 		}
-		if m.Cover != "" {
-			u, err := url.Parse(m.Cover)
+		coverTarget := m.Cover
+		if coverTarget == "" {
+			if m.Photo != "" {
+				coverTarget = m.Photo
+			} else if m.Avatar != "" {
+				coverTarget = m.Avatar
+			}
+		}
+		if coverTarget == "" && p.Group == "about" {
+			for _, candidate := range []string{"profile.jpg", "profile.jpeg", "profile.png", "profile.webp", "avatar.jpg", "avatar.jpeg", "avatar.png", "avatar.webp"} {
+				candidateRel := path.Join(path.Dir(file), candidate)
+				if _, ok := variants[candidateRel]; ok {
+					coverTarget = candidate
+					break
+				}
+				if _, err := os.Stat(filepath.Join(c.Content, filepath.FromSlash(candidateRel))); err == nil {
+					coverTarget = candidate
+					break
+				}
+			}
+		}
+		if coverTarget != "" {
+			u, err := url.Parse(coverTarget)
 			if err != nil {
 				return err
 			}
 			if u.Scheme != "" || u.Host != "" {
-				p.CoverURL = m.Cover
+				p.CoverURL = coverTarget
 			} else {
 				key := path.Clean(path.Join(path.Dir(file), u.Path))
 				if strings.HasPrefix(u.Path, "/") {
@@ -339,8 +372,23 @@ func generate(c config.Config, out string) error {
 
 	var featured []Page
 	for i := range projects {
-		if len(featured) < 4 {
+		if len(featured) < 5 {
 			featured = append(featured, projects[i])
+		}
+	}
+	var recentPosts []Page
+	for i := range posts {
+		if len(recentPosts) < 5 {
+			recentPosts = append(recentPosts, posts[i])
+		}
+	}
+	var activity []Page
+	for i := range pages {
+		p := &pages[i]
+		if p.Group != "about" {
+			if len(activity) < 6 {
+				activity = append(activity, *p)
+			}
 		}
 	}
 
@@ -355,7 +403,6 @@ func generate(c config.Config, out string) error {
 		}
 	}
 
-
 	indexData := view{
 		Site:        c,
 		Prefix:      "./",
@@ -365,8 +412,9 @@ func generate(c config.Config, out string) error {
 		Section:     "home",
 		Groups:      projectGroups,
 		Tags:        tagList,
-		Posts:       posts,
+		Posts:       recentPosts,
 		Featured:    featured,
+		Activity:    activity,
 		IntroTitle:  introTitle,
 		IntroHTML:   introHTML,
 	}
@@ -377,8 +425,8 @@ func generate(c config.Config, out string) error {
 	projectsData := view{
 		Site:        c,
 		Prefix:      "../",
-		Title:       "Projects — " + c.Title,
-		Description: "Selected projects and work.",
+		Title:       i18n.T(c.Lang, "projects") + " — " + c.Title,
+		Description: i18n.T(c.Lang, "projects_lead"),
 		Canonical:   canonical(c.BaseURL, "projects/index.html"),
 		Section:     "projects",
 		Groups:      projectGroups,
@@ -392,8 +440,8 @@ func generate(c config.Config, out string) error {
 	blogData := view{
 		Site:        c,
 		Prefix:      "../",
-		Title:       "Writing — " + c.Title,
-		Description: "Notes, thoughts, and technical write-ups.",
+		Title:       i18n.T(c.Lang, "writing") + " — " + c.Title,
+		Description: i18n.T(c.Lang, "writing_lead"),
 		Canonical:   canonical(c.BaseURL, "blog/index.html"),
 		Section:     "blog",
 		Posts:       posts,
@@ -403,21 +451,32 @@ func generate(c config.Config, out string) error {
 	}
 
 	if !hasAbout {
+		var aboutCoverURL string
+		var aboutCoverImage images.Variant
+		for _, candidate := range []string{"about/profile.jpg", "about/profile.jpeg", "about/profile.png", "about/profile.webp", "about/avatar.jpg", "about/avatar.jpeg", "about/avatar.png", "about/avatar.webp"} {
+			if v, ok := variants[candidate]; ok {
+				aboutCoverURL = candidate
+				aboutCoverImage = v
+				break
+			}
+		}
 		aboutData := view{
 			Site:        c,
 			Prefix:      "../",
-			Title:       "About — " + c.Title,
+			Title:       i18n.T(c.Lang, "about") + " — " + c.Title,
 			Description: c.Description,
 			Canonical:   canonical(c.BaseURL, "about/index.html"),
 			Section:     "about",
 			Page: &Page{
 				Meta: markdown.Meta{
-					Title:       "About",
+					Title:       i18n.T(c.Lang, "about"),
 					Description: c.Description,
 				},
-				Group: "about",
-				URL:   "about/index.html",
-				HTML:  template.HTML(fmt.Sprintf("<p>%s is a creator and engineer building minimalist software and design systems.</p>", c.Author)),
+				Group:      "about",
+				URL:        "about/index.html",
+				CoverURL:   aboutCoverURL,
+				CoverImage: aboutCoverImage,
+				HTML:       template.HTML(i18n.T(c.Lang, "default_about_html", c.Author)),
 			},
 		}
 		if err := render(tpl, "page.html", out, "about/index.html", aboutData); err != nil {
