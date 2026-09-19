@@ -9,7 +9,7 @@
     {{if .Description}}<p class="detail-lede">{{.Description}}</p>{{end}}
     <div class="detail-meta">
       {{if .Date}}<time class="meta-item" datetime="{{.Date}}">{{.Date}}</time>{{end}}
-      {{if .Tags}}<div class="meta-tags">{{range .Tags}}<span class="meta-tag">{{.}}</span>{{end}}</div>{{end}}
+      {{if .Tags}}<div class="meta-tags">{{range $i, $tag := .Tags}}{{if $i}}<span class="tag-sep" aria-hidden="true">·</span>{{end}}<span class="meta-tag">{{$tag}}</span>{{end}}</div>{{end}}
     </div>
   </header>
   {{if .CoverImage.WebP}}

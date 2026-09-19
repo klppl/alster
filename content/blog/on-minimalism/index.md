@@ -2,7 +2,7 @@
 title: On Scandinavian Minimalism in Software
 description: Why quiet interfaces, intentional whitespace, and restraint endure longer than trend-driven design systems.
 date: 2026-09-10
-tags: [Design, Philosophy]
+tags: [Design, Filosofi]
 ---
 
 Much of modern interface design is preoccupied with novelty: floating glass morphisms, oversized cards, and saturated gradients that demand attention for their own sake. When everything screams for hierarchy, nothing has any.

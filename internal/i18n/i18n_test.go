@@ -11,8 +11,8 @@ func TestT(t *testing.T) {
 	if got := T("sv", "projects"); got != "Projekt" {
 		t.Errorf("sv projects = %q, want Projekt", got)
 	}
-	if got := T("sv", "all_writing"); got != "Alla texter →" {
-		t.Errorf("sv all_writing = %q, want Alla texter →", got)
+	if got := T("sv", "all_writing"); got != "Allt skrivande →" {
+		t.Errorf("sv all_writing = %q, want Allt skrivande →", got)
 	}
 	// Fallback to English for unknown language
 	if got := T("de", "recently_shipped"); got != "Recently shipped" {

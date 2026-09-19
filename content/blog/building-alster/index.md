@@ -2,7 +2,7 @@
 title: "Building Alster: A Pragmatic Static Site Generator"
 description: Designing a lightweight portfolio and blog generator using Go standard library, semantic HTML, and zero frontend frameworks.
 date: 2026-09-02
-tags: [Go, Web, Tools]
+tags: [Go, Webb, Verktyg]
 ---
 
 Static website generators frequently begin as simple scripts and gradually metastasize into complex framework wrappers requiring node runtimes, hydration hydration layers, and multi-gigabyte package trees.

@@ -50,6 +50,17 @@ func nested(a, b string) bool {
 	return err == nil && rel != ".." && !strings.HasPrefix(rel, ".."+string(filepath.Separator))
 }
 
+func isFrontpageFile(rel string) bool {
+	base := strings.ToLower(path.Base(rel))
+	if !strings.Contains(rel, "/") {
+		switch base {
+		case "index.md", "_index.md", "home.md", "frontpage.md", "frontpage-about.md":
+			return true
+		}
+	}
+	return base == "frontpage-about.md" || base == "frontpage.md" || base == "home.md"
+}
+
 // Run stages a complete build before replacing only an Alster-owned output tree.
 func Run(c config.Config) error {
 	if err := config.ValidateBaseURL(c.BaseURL); err != nil {
@@ -143,7 +154,7 @@ func generate(c config.Config, out string) error {
 		if !d.Type().IsRegular() {
 			return fmt.Errorf("unsupported file: %s", filename)
 		}
-		if !strings.Contains(rel, "/") && !strings.EqualFold(rel, "about.md") && !strings.EqualFold(rel, "frontpage-about.md") {
+		if !strings.Contains(rel, "/") && !strings.EqualFold(rel, "about.md") && !isFrontpageFile(rel) {
 			return fmt.Errorf("content files must be inside project folders: %s", rel)
 		}
 		if strings.EqualFold(path.Ext(rel), ".md") {
@@ -225,7 +236,22 @@ func generate(c config.Config, out string) error {
 		if err != nil {
 			return fmt.Errorf("%s: %w", file, err)
 		}
-		if strings.EqualFold(file, "frontpage-about.md") || strings.EqualFold(path.Base(file), "frontpage-about.md") {
+		if isFrontpageFile(file) {
+			if m.Title == "" {
+				lines := bytes.Split(body, []byte("\n"))
+				for i, line := range lines {
+					trimmed := bytes.TrimSpace(line)
+					if len(trimmed) == 0 {
+						continue
+					}
+					if bytes.HasPrefix(trimmed, []byte("# ")) {
+						m.Title = string(bytes.TrimSpace(trimmed[2:]))
+						lines = append(lines[:i], lines[i+1:]...)
+						body = bytes.Join(lines, []byte("\n"))
+					}
+					break
+				}
+			}
 			introTitle = m.Title
 			rendered, err := markdown.Render(body, file, "./", variants)
 			if err != nil {
@@ -437,6 +463,18 @@ func generate(c config.Config, out string) error {
 		return err
 	}
 
+	var postTagList []string
+	postTagsMap := map[string]bool{}
+	for _, post := range posts {
+		for _, tag := range post.Tags {
+			postTagsMap[tag] = true
+		}
+	}
+	for tag := range postTagsMap {
+		postTagList = append(postTagList, tag)
+	}
+	sort.Strings(postTagList)
+
 	blogData := view{
 		Site:        c,
 		Prefix:      "../",
@@ -444,6 +482,7 @@ func generate(c config.Config, out string) error {
 		Description: i18n.T(c.Lang, "writing_lead"),
 		Canonical:   canonical(c.BaseURL, "blog/index.html"),
 		Section:     "blog",
+		Tags:        postTagList,
 		Posts:       posts,
 	}
 	if err := render(tpl, "blog.html", out, "blog/index.html", blogData); err != nil {

@@ -11,7 +11,7 @@ image_width: 1600
 nav:
   - label: Projekt
     url: /projects/index.html
-  - label: Blogg
+  - label: Skrivande
     url: /blog/index.html
   - label: Om
     url: /about/index.html

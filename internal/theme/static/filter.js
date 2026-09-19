@@ -3,11 +3,11 @@
   if (!container) return;
 
   const buttons = Array.from(container.querySelectorAll('.filter-btn'));
-  const cards = Array.from(document.querySelectorAll('.card'));
-  const groups = Array.from(document.querySelectorAll('.project-group'));
+  const items = Array.from(document.querySelectorAll('.card, .writing-item'));
+  const groups = Array.from(document.querySelectorAll('.project-group, .writing-section'));
   const noResults = document.querySelector('#no-results');
 
-  if (buttons.length <= 1 || cards.length === 0) return;
+  if (buttons.length <= 1 || items.length === 0) return;
 
   container.hidden = false;
 
@@ -22,18 +22,22 @@
 
     groups.forEach((group) => {
       let groupVisible = 0;
-      const groupCards = group.querySelectorAll('.card');
+      const groupItems = group.querySelectorAll('.card, .writing-item');
 
-      groupCards.forEach((card) => {
-        const rawTags = card.dataset.tags || '';
+      groupItems.forEach((item) => {
+        const rawTags = item.dataset.tags || '';
         const tags = rawTags.split(',').map((t) => t.trim());
         const match = !selectedTag || tags.includes(selectedTag);
 
-        card.hidden = !match;
+        item.hidden = !match;
         if (match) groupVisible++;
       });
 
       group.hidden = groupVisible === 0;
+      const countEl = group.querySelector('.group-count');
+      if (countEl && groupVisible > 0) {
+        countEl.textContent = groupVisible;
+      }
       totalVisible += groupVisible;
     });
 

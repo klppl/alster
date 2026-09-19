@@ -329,6 +329,12 @@ func TestMultiSectionSite(t *testing.T) {
 	if !strings.Contains(blogHTML, "First Post") {
 		t.Error("blog/index.html missing post title")
 	}
+	if !strings.Contains(blogHTML, "filter-btn") {
+		t.Error("blog/index.html missing filter buttons")
+	}
+	if !strings.Contains(blogHTML, `class="writing-item" data-tags="Design"`) {
+		t.Errorf("blog/index.html missing writing-item with data-tags: %s", blogHTML)
+	}
 
 	postHTML := read(t, filepath.Join(c.Output, "blog/first-post/index.html"))
 	if !strings.Contains(postHTML, "Hello world from post.") {
@@ -349,7 +355,7 @@ func TestSwedishSite(t *testing.T) {
 	c.Lang = "sv"
 	c.Nav = []config.Link{
 		{Label: "Projekt", URL: "/projects/index.html"},
-		{Label: "Blogg", URL: "/blog/index.html"},
+		{Label: "Skrivande", URL: "/blog/index.html"},
 		{Label: "Om", URL: "/about/index.html"},
 	}
 	if err := Run(c); err != nil {
@@ -360,14 +366,14 @@ func TestSwedishSite(t *testing.T) {
 	if !strings.Contains(indexHTML, `<html lang="sv">`) {
 		t.Errorf("index.html missing lang=sv: %s", indexHTML[:200])
 	}
-	if !strings.Contains(indexHTML, "Senaste") {
-		t.Error("index.html missing Swedish feed title 'Senaste'")
+	if !strings.Contains(indexHTML, "Projekt") || !strings.Contains(indexHTML, "Skrivande") {
+		t.Error("index.html missing Swedish navigation items")
 	}
 	if !strings.Contains(indexHTML, "Hoppa till innehåll") {
 		t.Error("index.html missing Swedish skip link")
 	}
-	if !strings.Contains(indexHTML, "Byggd med Alster") {
-		t.Error("index.html missing Swedish colophon")
+	if !strings.Contains(indexHTML, "https://github.com/klppl") || !strings.Contains(indexHTML, "klppl") {
+		t.Error("index.html missing footer klppl link")
 	}
 
 	projectsHTML := read(t, filepath.Join(c.Output, "projects/index.html"))
@@ -455,6 +461,40 @@ func TestAboutSidebar(t *testing.T) {
 	}
 	if !strings.Contains(aboutHTML, `rel="noopener me"`) {
 		t.Errorf("about page external links missing rel=noopener me: %s", aboutHTML)
+	}
+}
+
+func TestFrontpageMarkdownIndex(t *testing.T) {
+	c := fixture(t)
+	put(t, filepath.Join(c.Content, "index.md"), "---\ntitle: Welcome to My Studio\n---\nHere is my custom bio and introduction.")
+
+	if err := Run(c); err != nil {
+		t.Fatalf("Run failed: %v", err)
+	}
+
+	indexHTML := read(t, filepath.Join(c.Output, "index.html"))
+	if !strings.Contains(indexHTML, "Welcome to My Studio") {
+		t.Error("index.html missing custom frontpage title from index.md")
+	}
+	if !strings.Contains(indexHTML, "Here is my custom bio and introduction.") {
+		t.Error("index.html missing custom bio text from index.md")
+	}
+}
+
+func TestFrontpageMarkdownHeadingWithoutFrontmatter(t *testing.T) {
+	c := fixture(t)
+	put(t, filepath.Join(c.Content, "index.md"), "# Heading From Markdown\n\nBio text without frontmatter.")
+
+	if err := Run(c); err != nil {
+		t.Fatalf("Run failed: %v", err)
+	}
+
+	indexHTML := read(t, filepath.Join(c.Output, "index.html"))
+	if !strings.Contains(indexHTML, "Heading From Markdown") {
+		t.Error("index.html missing custom frontpage title from markdown H1")
+	}
+	if !strings.Contains(indexHTML, "Bio text without frontmatter.") {
+		t.Error("index.html missing custom bio text from markdown")
 	}
 }
 

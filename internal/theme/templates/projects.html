@@ -23,7 +23,7 @@
     <div class="grid">
       {{range .Pages}}
       <article class="card" data-tags="{{join .Tags ","}}">
-        <a class="cover" href="{{pageURL .URL $.Prefix}}" aria-label="View {{.Title}}">
+        <a class="cover" href="{{pageURL .URL $.Prefix}}" aria-label="{{.Title}}">
           {{if .CoverImage.WebP}}
           <picture>
             <source type="image/webp" srcset="{{asset .CoverImage.WebP $.Prefix}}">
@@ -38,13 +38,13 @@
         <div class="card-body">
           <div class="card-meta">
             {{if .Date}}<time datetime="{{.Date}}">{{.Date}}</time>{{end}}
-            {{if .Status}}<span class="status">{{if eq .Status "wip"}}{{t "status_wip"}}{{else}}{{.Status}}{{end}}</span>{{end}}
+            {{if .Status}}<span class="status">{{if eq .Status "active"}}{{t "status_active"}}{{else if eq .Status "archived"}}{{t "status_archived"}}{{else if eq .Status "wip"}}{{t "status_wip"}}{{else}}{{.Status}}{{end}}</span>{{end}}
           </div>
           <h3 class="card-title"><a href="{{pageURL .URL $.Prefix}}">{{.Title}}</a></h3>
           {{if .Description}}<p class="card-desc">{{.Description}}</p>{{end}}
           {{if .Tags}}
-          <div class="tags" aria-label="Tags">
-            {{range .Tags}}<span class="tag">{{.}}</span>{{end}}
+          <div class="tags">
+            {{range $i, $tag := .Tags}}{{if $i}}<span class="tag-sep" aria-hidden="true">·</span>{{end}}<span class="tag">{{$tag}}</span>{{end}}
           </div>
           {{end}}
         </div>

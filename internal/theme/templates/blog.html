@@ -4,27 +4,52 @@
     <h1 class="intro-title">{{t "writing"}}</h1>
     <p class="intro-lead">{{t "writing_lead"}}</p>
   </section>
-  {{if .Posts}}
-  <div class="post-archive">
-    {{range .Posts}}
-    <article class="post-card">
-      <div class="post-card-meta">
-        {{if .Date}}<time datetime="{{.Date}}">{{.Date}}</time>{{end}}
-        {{if .Tags}}
-        <div class="tags">
-          {{range .Tags}}<span class="tag">{{.}}</span>{{end}}
-        </div>
-        {{end}}
-      </div>
-      <div class="post-card-main">
-        <h2 class="post-card-title"><a href="{{pageURL .URL $.Prefix}}">{{.Title}}</a></h2>
-        {{if .Description}}<p class="post-card-desc">{{.Description}}</p>{{end}}
-      </div>
-    </article>
-    {{end}}
+  {{if .Tags}}
+  <div class="filters" hidden>
+    <nav class="filter-nav" aria-label="{{t "filter_aria_writing"}}">
+      <button type="button" class="filter-btn is-active" data-tag="" aria-pressed="true">{{t "filter_all"}}</button>
+      {{range .Tags}}
+      <button type="button" class="filter-btn" data-tag="{{.}}" aria-pressed="false">{{.}}</button>
+      {{end}}
+    </nav>
   </div>
+  {{end}}
+  {{if .Posts}}
+  <section class="writing-section" aria-label="{{t "writing"}}">
+    <div class="group-header">
+      <h2 class="group-title">{{t "articles"}}</h2>
+      <span class="group-count">{{len .Posts}}</span>
+    </div>
+    <ul class="writing-list" role="list">
+      {{range .Posts}}
+      <li class="writing-item" data-tags="{{join .Tags ","}}">
+        <article class="writing-entry">
+          <a href="{{pageURL .URL $.Prefix}}" class="writing-link">
+            <div class="writing-header">
+              <h2 class="writing-title">{{.Title}}</h2>
+              <span class="writing-arrow" aria-hidden="true">→</span>
+            </div>
+            {{if .Description}}
+            <p class="writing-desc">{{.Description}}</p>
+            {{end}}
+            <div class="writing-meta">
+              {{if .Date}}<time datetime="{{.Date}}" class="writing-date">{{.Date}}</time>{{end}}
+              {{if .Tags}}
+              <span class="writing-meta-sep" aria-hidden="true">·</span>
+              <div class="writing-tags">
+                {{range $i, $tag := .Tags}}{{if $i}}<span class="writing-tag-sep" aria-hidden="true">·</span>{{end}}<span class="writing-tag">{{$tag}}</span>{{end}}
+              </div>
+              {{end}}
+            </div>
+          </a>
+        </article>
+      </li>
+      {{end}}
+    </ul>
+  </section>
   {{else}}
   <p class="empty">{{t "no_posts"}}</p>
   {{end}}
+  <p id="no-results" class="empty" hidden>{{t "no_posts_found"}}</p>
 </main>
 {{template "footer" .}}
