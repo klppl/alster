@@ -193,4 +193,4 @@ rsync -avz --delete dist/ user@server:/var/www/alster/
 
 ## License
 
-MIT
+[Lagom License](LICENSE) (Version 2).
