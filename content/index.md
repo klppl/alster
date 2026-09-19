@@ -1,5 +1,5 @@
 ---
-title: Små verktyg, teman och saker jag bygger på fritiden.
+title: Små verktyg, digital formgivning och hantverk i kod.
 ---
 
-Jag är Alex, mjukvaruingenjör och designer. Fokuserad på enkla verktyg, idiomatisk Go och lugna gränssnitt.
+En avskalad demonstrationssajt för Alster — en statisk webbgenerator i Go med fokus på lugna gränssnitt, god typografi och ren HTML utan externa ramverk.

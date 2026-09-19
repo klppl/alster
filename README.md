@@ -41,8 +41,8 @@ content/
 │   │   └── index.md         # Blog post: dist/blog/building-alster/index.html
 │   └── on-minimalism/
 │       └── index.md         # Blog post: dist/blog/on-minimalism/index.html
-├── teslatracker/
-│   ├── index.md             # Project page: dist/teslatracker/index.html
+├── telemetry/
+│   ├── index.md             # Project page: dist/telemetry/index.html
 │   └── cover.png            # Project card cover (auto-converted to WebP)
 └── ghost-themes/
     ├── index.md             # Project overview: dist/ghost-themes/index.html
@@ -66,7 +66,7 @@ tags: [Go, Audio, DSP]
 status: active
 cover: cover.png
 live_url: https://audiodsp.example.com
-source_url: https://github.com/alex/audiodsp
+source_url: https://github.com/klppl/audiodsp
 ---
 
 Write project documentation and notes here in standard Markdown.
@@ -99,10 +99,10 @@ Site settings, navigation, and author details live in `alster.yaml`:
 
 ```yaml
 title: Alster
-author: Alex
-description: Små verktyg, teman och saker jag bygger på fritiden.
+author: Alster
+description: Små verktyg, digital formgivning och hantverk i kod.
 lang: sv                   # Language code: sv or en
-base_url: ""               # Canonical URL (e.g. https://alex.github.io/alster)
+base_url: ""               # Canonical URL (e.g. https://yourname.github.io/alster)
 accent: "#315d49"          # Accent hex color
 content: content           # Content directory
 output: dist               # Target static build directory
@@ -119,15 +119,11 @@ nav:
 
 social:
   - label: E-post
-    url: mailto:alex@example.com
+    url: mailto:hello@example.com
   - label: GitHub
-    url: https://github.com/alex
+    url: https://github.com/yourusername/alster
   - label: Bluesky
-    url: https://bsky.app/profile/alex.bsky.social
-  - label: LinkedIn
-    url: https://linkedin.com/in/alex
-  - label: X
-    url: https://x.com/alex
+    url: https://bsky.app/profile/yourusername.bsky.social
 ```
 
 - Set `lang: sv` for Swedish UI strings or `lang: en` for English.

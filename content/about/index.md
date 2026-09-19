@@ -1,11 +1,11 @@
 ---
 title: Om
-description: Mjukvaruutvecklare och gränssnittsdesigner baserad i Stockholm.
+description: Bakgrund, principer och teknisk kolofon för Alster.
 date: 2026-09-15
 photo: profile.jpg
 ---
 
-Jag bygger små, fokuserade verktyg och digitala artefakter med betoning på skandinavisk minimalism, beräkningseffektivitet och lugna gränssnitt. Min filosofi kretsar kring enkla lösningar som gör en sak exceptionellt väl.
+Detta är en demonstrationssajt och startmall för [Alster](https://github.com/klppl/alster). Den visar hur personliga portföljer, projektsamlingar och tekniska essäer kan presenteras med skandinavisk minimalism, god typografi och beräkningseffektivitet.
 
 ### Principer
 
@@ -15,4 +15,4 @@ Jag bygger små, fokuserade verktyg och digitala artefakter med betoning på ska
 
 ### Kolofon
 
-Denna webbplats genereras statiskt med [Alster](https://github.com/alex/alster). Resultatet är helt fristående HTML och CSS utan klientsidiga ramverk eller spårning.
+Denna webbplats genereras statiskt med [Alster](https://github.com/klppl/alster). Resultatet är helt fristående HTML och CSS utan klientsidiga ramverk, externa typsnittsförfrågningar eller spårning.
