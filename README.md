@@ -1,5 +1,7 @@
 # Alster
 
+[![License: Lagom](https://img.shields.io/badge/license-lagom-9E2B25)](https://klppl.github.io/lagom-license/)
+
 A minimalist, zero-dependency static site generator and Scandinavian portfolio theme written in Go. Compiles Markdown and assets into self-contained, high-performance static HTML without frontend frameworks.
 
 **Live Demo:** [https://klppl.github.io/alster/](https://klppl.github.io/alster/)
